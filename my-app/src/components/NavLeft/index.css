@@ -1,0 +1,16 @@
+.logo{
+ line-height: 90px;
+ padding-left: 20px;
+}
+
+img{
+    height: 40px;
+}
+
+h1{
+    color: blueviolet;
+    font-size: 30px;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 0 10px;
+}
