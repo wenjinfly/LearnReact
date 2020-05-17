@@ -1,20 +1,17 @@
-
+@import './default.less';
 .container{
-    display: flex;
-   // background-color: yellowgreen;
     .nav-left{
-        width:15%;
-        min-width: 180px;
         height: calc(100vh);
         background-color: #001529;
+        color: #ffffff;
     }
     .main{
-        flex: 1;
         height: calc(100vh);
+        background-color: @colorL;
+        overflow: auto;
     }
     .content{
         position: relative;
         padding: 20px ;
-        background-color: seagreen;
     }
 }
