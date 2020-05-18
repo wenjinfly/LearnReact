@@ -12,12 +12,12 @@ export default class Header extends React.Component{
             userName:"麦子"
         })
 
-        setInterval(() => {
+        setInterval(()=>{
             let sysTime = Util.formateData(new Date().getTime());
             this.setState({
                 sysTime
             })
-        }, 1000);
+        },1000);
     };
     render(){
         return (
@@ -34,7 +34,7 @@ export default class Header extends React.Component{
                         首页
                     </Col>
                     <Col span="20" className="weather">
-                        <span className="date">{this.state.sysTime}</span>
+                    <span className="date">{this.state.sysTime}</span>
                         <span>天气不错
                         </span>
                     </Col>
