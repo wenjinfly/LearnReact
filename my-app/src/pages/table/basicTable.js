@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card ,Table,Message} from 'antd';
+import { Card ,Table,Message,Button,Modal} from 'antd';
 import axios from './../../axios/index'
 
 export default class BasicTable extends React.Component {
@@ -33,9 +33,9 @@ export default class BasicTable extends React.Component {
               },
           ]
 
-        //   dataSource.map((item,index)=>{
-        //     item.key = index;
-        // })
+          dataSource.map((item,index)=>{
+            item.id = index;
+        })
 
           this.setState(
               {dataSource}
@@ -61,7 +61,11 @@ export default class BasicTable extends React.Component {
             if(res.code == 0){
                 this.setState(
                     {
-                        dataSource2:res.result
+                        dataSource2:res.result,
+                        
+                        selectedRowKeys:[],
+                        selectedRows:null
+
                     }
                 )
             }
@@ -77,6 +81,32 @@ export default class BasicTable extends React.Component {
         Message.error("hello " + errorInfo.values.username + " pwd is:" + errorInfo.values.password );
        // console.log('Failed:', errorInfo);
     }
+
+    onRowClick=(record , index )=>{
+        let selectKey = [index];
+        Message.info(record.name +"***" + selectKey);
+        this.setState({
+            selectedRowKeys:selectKey,
+            selectedItem:record
+        })
+    }
+
+       // 多选执行删除动作
+       handleDelete = (()=>{
+        let rows = this.state.selectedRows;
+        let ids = [];
+        rows.map((item)=>{
+            ids.push(item.key)
+        })
+        Modal.confirm({
+            title:'删除提示',
+            content: `您确定要删除这些数据吗？${ids.join(',')}`,
+            onOk:()=>{
+                Message.success('删除成功');
+                this.request();
+            }
+        })
+    })
 
     render(){
         const columns = [
@@ -110,9 +140,31 @@ export default class BasicTable extends React.Component {
             },
           ];
         
-          onRowClick=(recod , index )=>{
+          const selectedRowKeys = this.state.selectedRowKeys;
+          const rowSelection2 = {
+                type:'radio',
+                selectedRowKeys,
+                onChange: (selectedRowKeys, selectedRows) => {
+                
+                Message.info(selectedRows[0].name +"###" + selectedRowKeys);
+                
+                 this.setState({
+                     selectedRowKeys,
+                     
+                 })
+            }
+          };
 
-          }
+          const rowSelection3 = {
+            type:'check',
+            selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+             this.setState({
+                 selectedRowKeys,
+                 selectedRows
+             })
+        }
+      }
           
         return(
             
@@ -130,18 +182,43 @@ export default class BasicTable extends React.Component {
                 
                 <Card title="表格-单选">
                     <Table 
-                    rowSelection={{
-                        type: "radio"
-                      }}
-                    
-                      onRow={(record,index) => {
+                    rowKey ={record=>record.id}
+
+                    rowSelection={
+                        rowSelection2
+                    }
+
+                    onRow={(record,index) => {
                         return {
                           onClick: ()=>{
                               this.onRowClick(record,index);
                           } // 点击行
                         };
-                      }}
+                      }}    
+                    
+                    dataSource={this.state.dataSource} columns={columns}/>
+                </Card>
 
+                <Card title="表格-多选">
+
+                    <div style={{marginBottom:10}}>
+                        <Button onClick={this.handleDelete}>删除</Button>
+                    </div>
+
+                    <Table 
+                    rowKey ={record=>record.id}
+                    rowSelection={
+                        rowSelection3
+                    }
+
+                    onRow={(record,index) => {
+                        return {
+                          onClick: ()=>{
+                              this.onRowClick(record,index);
+                          } // 点击行
+                        };
+                      }}    
+                    
                     dataSource={this.state.dataSource} columns={columns}/>
                 </Card>
 
