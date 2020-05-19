@@ -31,6 +31,13 @@ export default class BasicTable extends React.Component {
                 age: 14,
                 address: '西湖区湖底公园3号',
               },
+              {
+                key: '4',
+                name: '马克',
+                sex: 1,
+                age: 24,
+                address: '天花有缘',
+              },
           ]
 
           dataSource.map((item,index)=>{
@@ -223,6 +230,24 @@ export default class BasicTable extends React.Component {
                 </Card>
 
                 <Card title="Mock-表格分页" style={{ margin: '10px 0' }}>
+                <Table 
+                    rowKey ={record=>record.id}
+                    rowSelection={
+                        rowSelection3
+                    }
+
+                    pagination={
+                        {defaultPageSize:2}
+                    }
+                    onRow={(record,index) => {
+                        return {
+                          onClick: ()=>{
+                              this.onRowClick(record,index);
+                          } // 点击行
+                        };
+                      }}    
+                    
+                    dataSource={this.state.dataSource} columns={columns}/>
                 </Card>
 
             </div>
